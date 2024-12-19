@@ -1,0 +1,104 @@
+import time, os, random
+
+def clear():
+  os.system("clear")
+  return clear
+def wait(seconds):
+  time.sleep(seconds)
+  return wait
+def nameSequence():
+  while True:
+   print("what would you like your charactor's name and type to be?")
+   wait(2)
+   clear()
+   name = input("Name: ")
+   char_type = input("""Types:
+  heavy; high health, low attack;
+  medium; medium health, medium attack;
+  light; low health, high attack: """)
+   if char_type == "heavy" or char_type == "medium" or char_type == "light":
+    clear()
+    break
+   else:
+    clear()
+    continue
+  return name, char_type
+def health(char_type):
+  if char_type == "heavy":
+    health = random.randint(1,12) * random.randint(1,12) * 2 + 60
+  elif char_type == "medium":
+    health = random.randint(1,12) * random.randint(1,12) * 1 + 60
+  elif char_type == "light":
+    health = random.randint(1,12) * random.randint(1,12) * 0.5 + 60
+  return health
+def damage(char_type):
+  if char_type == "heavy":
+    damage = random.randint(1,12) * random.randint(1,12) * 0.5 + 20
+  elif char_type == "medium":
+    damage = random.randint(1,12) * random.randint(1,12) * 1 + 20
+  elif char_type == "light":
+    damage = random.randint(1,12) * random.randint(1,12) * 2 + 20
+    
+  return damage
+def twoCharGen(name, char_type, health, damage):
+ char1 = nameSequence() 
+ char1HP = health(char1[1])
+ char1DP = damage(char1[1])
+ print(char1)
+ print(char1HP, "health", char1DP, "damage  points")
+ wait(4)
+ clear()
+ char2 = nameSequence()
+ char2HP = health(char2[1])
+ char2DP = damage(char2[1])
+ print(char2)
+ print(char2HP, "health", char2DP, "damage points")
+ wait(4)
+ clear()
+ return char1, char2, char1HP, char2HP, char1DP, char2DP
+def battle(char1, char2, char1HP, char2HP, char1DP, char2DP):
+  print("ITS BATTLE TIME!")
+  wait(4)
+  while True:
+    char1Roll = random.randint(1,12)
+    char2Roll = random.randint(1,12)
+    if char1Roll > char2Roll:
+      print(char1[0], "wins the roll!")
+      wait(3)
+      char2HP -= char1DP
+      print(char2[0], "takes", char1DP, "damage!")
+      wait(3)
+      print(char2[0], "has", char2HP, "health left!")
+      wait(5)
+      clear()
+      if char2HP <= 0:
+        print(char1[0], "wins the battle!")
+        wait(2)
+        clear()
+        break
+      else:
+        continue
+    elif char2Roll > char1Roll:
+      print(char2[0], "wins the roll!")
+      wait(2)
+      clear()
+      char1HP -= char2DP
+      print(char1[0], "takes", char2DP, "damage!")
+      wait(2)
+      print(char1[0], "has", char1HP, "health left!")
+      wait(3)
+      clear()
+      if char1HP <= 0:
+        print(char2[0], "wins the battle!")
+        break
+      else:
+        continue
+    else:
+      print("its a draw!")
+      wait(3)
+      clear()
+      continue
+name = ""
+char_type = ""
+char1, char2, char1HP, char2HP, char1DP, char2DP = twoCharGen(name, char_type, health, damage)
+battle(char1, char2, char1HP, char2HP, char1DP, char2DP)
