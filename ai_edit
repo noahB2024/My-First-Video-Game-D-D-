@@ -1,0 +1,94 @@
+
+
+
+import time, os, random
+
+def clear():
+    os.system("clear")
+    return clear
+
+def wait(seconds):
+    time.sleep(seconds)
+    return wait
+
+def nameSequence():
+    while True:
+        print("What would you like your character's name and type to be?")
+        wait(2)
+        clear()
+        name = input("Name: ")
+        char_type = input("""Types:
+  ogre; high health, low attack; 10hp gain per round
+  human; medium health, medium attack; 30hp gain per round
+  wizard; low health, high attack; 50hp gain per round 
+  """)
+        if char_type in ["ogre", "human", "wizard"]:
+            clear()
+            break
+        else:
+            clear()
+            continue
+    return name, char_type
+
+def health(char_type):
+    if char_type == "ogre":
+        health = random.randint(1, 12) * random.randint(1, 12) * 2 + 450
+    elif char_type == "human":
+        health = random.randint(1, 12) * random.randint(1, 12) * 1 + 300
+    elif char_type == "wizard":
+        health = random.randint(1, 12) * random.randint(1, 12) * 0.5 + 200
+    return health
+
+def damage(char_type):
+    if char_type == "ogre":
+        damage = random.randint(1, 12) * random.randint(1, 12) * 0.5 + 25
+    elif char_type == "human":
+        damage = random.randint(1, 12) * random.randint(1, 12) * 1 + 30
+    elif char_type == "wizard":
+        damage = random.randint(1, 12) * random.randint(1, 12) * 2 + 40
+    return damage
+
+def generateCharacters():
+    characters = []
+    while True:
+        char = nameSequence()
+        charHP = health(char[1])
+        charDP = damage(char[1])
+        characters.append({"name": char[0], "type": char[1], "health": charHP, "damage": charDP})
+        print(f"{char[0]} ({char[1]}) - {charHP} health, {charDP} damage points")
+        wait(4)
+        clear()
+        more = input("Would you like to add another character? (yes/no): ").strip().lower()
+        if more != "yes":
+            break
+    return characters
+
+def battle(characters):
+    print("ITS BATTLE TIME!")
+    wait(4)
+    while len(characters) > 1:
+        rolls = {char["name"]: random.randint(1, 12) for char in characters}
+        max_roll = max(rolls.values())
+        attacker = [char for char in characters if rolls[char["name"]] == max_roll][0]
+
+        print(f"{attacker['name']} wins the roll with {max_roll}!")
+        wait(3)
+
+        for char in characters:
+            if char != attacker:
+                char["health"] -= attacker["damage"]
+                print(f"{char['name']} takes {attacker['damage']} damage from {attacker['name']}!")
+                wait(2)
+            
+        characters = [char for char in characters if char["health"] > 0]  # Remove defeated characters
+        print("\nRemaining characters:")
+        for char in characters:
+            print(f"{char['name']} - {char['health']} health")
+        wait(5)
+        clear()
+
+    print(f"{characters[0]['name']} is the ultimate winner!")
+
+# Main Program
+characters = generateCharacters()
+battle(characters)
